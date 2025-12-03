@@ -1,0 +1,80 @@
+-Docker is a platform for “containerizing” applications — in short: packaging software + everything it needs (code, libraries, 
+ dependencies) into a compact, portable "box".
+
+-These boxes are called containers. A container includes the application and all its environment so it can run reliably on any 
+ system that supports Docker — "works on my machine" becomes "works everywhere."
+
+-Instead of giving each application a full separate virtual machine (VM) — which is heavy, slow, and redundant — containers 
+ share the host system’s operating-system kernel. That makes containers lightweight, fast to start, and resource-efficient.
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+How Docker works — basic concepts
+
+-Image: Think of this as a blueprint or template. It defines what the container will contain — the application code, libraries, runtime, etc.
+
+-Container: This is the running instance made from an image. It’s like when we create an object (container) from a class (image). We can run many containers from the 
+ same image, in parallel.
+
+-The container is isolated: it doesn’t rely on what’s installed on the host machine. That isolation and portability is a big part of why Docker is useful.
+
+-Because all containers on a system share the same OS kernel (rather than having whole separate OS per VM), Docker uses much fewer resources than traditional VMs — faster startup, lower memory/storage overhead.
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Why people use Docker (advantages)
+
+-Portability: We package everything our app needs; then we can run it on our laptop, on a server, in the cloud — same behavior everywhere.
+
+-Consistency: Since the environment is defined in the image, we avoid the classic “works on my machine, fails on yours” problem.
+
+-Efficiency: Containers are lightweight compared to VMs — they start quickly, can run many on one machine, and use resources more economically.
+
+-Isolation: Each container runs separately; if one crashes, others are unaffected. It also helps with dependency management — different apps can use different library 
+ versions without conflict.
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+How we’d use Docker (in simple steps):
+
+1-Write a Dockerfile — a small file that describes what our application needs (base OS, libraries, code, commands to run).
+
+2-Build the Docker image from that Dockerfile (essentially “compile” the blueprint).
+
+3-Run the image to create a Docker container — that container becomes our running application, isolated and portable.
+
+4-Share the image (for example via an image registry) so others can run the exact same container.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
