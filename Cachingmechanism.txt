@@ -1,0 +1,162 @@
+Caching helps the application run faster by saving the results of expensive or repeated method calls so we don’t have to run them again.
+
+
+Example:
+If getting a customer’s address takes 5 seconds, caching can save that result so next time you get it instantly.
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+1) What We Need
+
+To use caching in Spring Boot, we add this dependency:
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-cache</artifactId>
+</dependency>
+
+
+
+Then we enable caching by adding:
+@EnableCaching
+
+
+to one of our configuration classes.
+A CacheManager is automatically created for us.
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+2) How Caching Works
+
+We add caching to methods using annotations.
+
+
+
+@Cacheable — "Store result the first time, reuse it next time"
+
+@Cacheable("addresses")
+public String getAddress(Customer customer) {...}
+
+-First call → real method runs → result saved in cache
+-Next call → returns saved result → method NOT executed again
+
+
+
+
+
+@CacheEvict — "Remove things from the cache"
+
+@CacheEvict(value = "addresses", allEntries = true)
+public void clearCache() {...}
+
+
+Used to remove stale or old data.
+
+allEntries = true → clears the whole cache.
+
+
+
+
+
+@CachePut — "Always run method AND update cache"
+
+@CachePut("addresses")
+public String getAddress(Customer customer) {...}
+
+
+Difference from @Cacheable:
+
+-Always runs the method
+-Always updates the cache with the new result
+
+
+
+
+
+@Caching — "Use many caching rules on one method"
+
+If we want multiple @CacheEvict or @Cacheable:
+
+@Caching(evict = {
+    @CacheEvict("addresses"),
+    @CacheEvict(value = "directory", key = "#customer.name")
+})
+
+
+
+
+
+
+@CacheConfig — "Set default cache values for the whole class"
+
+@CacheConfig("addresses")
+public class CustomerService {
+
+    @Cacheable
+    public String getAddress(Customer c) { ... }
+}
+
+
+Now every method inside uses the same cache by default.
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+3) Conditional Caching
+
+We can control when the cache should be used.
+
+
+condition → based on method input
+
+@CachePut(value="addresses", condition="#customer.name == 'Tom'")
+
+
+Only cache if the customer’s name is Tom.
+
+
+
+
+unless → based on method output
+
+@CachePut(value="addresses", unless="#result.length() < 64")
+
+
+Do NOT cache if the result is shorter than 64 characters.
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+4) Custom CacheManager (optional)
+
+If we want to manually define caches:
+
+@Bean
+public CacheManager cacheManager() {
+    SimpleCacheManager manager = new SimpleCacheManager();
+    manager.setCaches(List.of(
+        new ConcurrentMapCache("addresses"),
+        new ConcurrentMapCache("directory")
+    ));
+    return manager;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
